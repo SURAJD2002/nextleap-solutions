@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NextLeap Solutions - Digital Solutions & Business Guidance</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js" crossorigin="anonymous"></script>
   <style>
     @keyframes slideIn {
       from { transform: translateY(-100%); opacity: 0; }
@@ -28,18 +28,30 @@
 </head>
 <body>
   <div id="root"></div>
+  <div id="error" style="display: none; color: red; text-align: center; padding: 20px;"></div>
   <script type="text/babel">
+    // Check if required libraries are loaded
+    if (!window.React || !window.ReactDOM || !window.Babel || !window.emailjs) {
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error').innerText = 'Failed to load required scripts. Please check your network connection.';
+      throw new Error('Required libraries (React, ReactDOM, Babel, or EmailJS) are not loaded.');
+    }
+
     const { useState, Component } = React;
 
     // Error Boundary Component
     class ErrorBoundary extends Component {
-      state = { hasError: false };
+      state = { hasError: false, errorMessage: '' };
       static getDerivedStateFromError(error) {
-        return { hasError: true };
+        return { hasError: true, errorMessage: error.message };
       }
       render() {
         if (this.state.hasError) {
-          return <h1 className="text-center text-red-600 p-4">Something went wrong.</h1>;
+          return (
+            <h1 className="text-center text-red-600 p-4">
+              Something went wrong: {this.state.errorMessage}
+            </h1>
+          );
         }
         return this.props.children;
       }
@@ -52,8 +64,36 @@
       const handleMenuItemClick = (sectionId) => {
         setIsOpen(false); // Close the menu
         setShowContent(true); // Show content
-        // Smooth scroll to the section
-        document.querySelector(sectionId).scrollIntoView({ behavior: 'smooth' });
+        // Wait for DOM to update before scrolling
+        setTimeout(() => {
+          const element = document.querySelector(sectionId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            console.warn(`Element with ID ${sectionId} not found.`);
+          }
+        }, 100);
+      };
+
+      const handleToggleMenu = () => {
+        if (isOpen) {
+          // If closing the menu, navigate to home
+          setIsOpen(false);
+          setShowContent(true);
+          // Wait for DOM to update before scrolling
+          setTimeout(() => {
+            const homeElement = document.querySelector('#home');
+            if (homeElement) {
+              homeElement.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              console.warn('Home element (#home) not found.');
+            }
+          }, 100);
+        } else {
+          // If opening the menu, hide content
+          setIsOpen(true);
+          setShowContent(false);
+        }
       };
 
       return (
@@ -62,10 +102,7 @@
             <h1 className="text-xl sm:text-2xl font-bold">NextLeap Solutions</h1>
             <button 
               className="md:hidden text-2xl bg-white text-blue-900 p-1 rounded-md transition-all duration-300 focus:outline-none" 
-              onClick={() => {
-                setIsOpen(!isOpen);
-                setShowContent(!isOpen); // Hide content when opening menu, show when closing
-              }}
+              onClick={handleToggleMenu}
             >
               {isOpen ? '✕' : '☰'}
             </button>
@@ -302,23 +339,28 @@
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        emailjs.init("dPxOR1vXr6ozvagsG");
-        emailjs.send("service_fm57xal", "template_ufaaac9", {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          service: formData.service,
-          message: formData.message,
-        })
-          .then(() => {
-            setShowNotification(true);
-            setFormData({ name: "", email: "", phone: "", service: "", message: "" });
-            setTimeout(() => setShowNotification(false), 3000);
+        try {
+          emailjs.init("dPxOR1vXr6ozvagsG");
+          emailjs.send("service_fm57xal", "template_ufaaac9", {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            service: formData.service,
+            message: formData.message,
           })
-          .catch((err) => {
-            setError("Failed to send message. Please try again.");
-            console.error(err);
-          });
+            .then(() => {
+              setShowNotification(true);
+              setFormData({ name: "", email: "", phone: "", service: "", message: "" });
+              setTimeout(() => setShowNotification(false), 3000);
+            })
+            .catch((err) => {
+              setError("Failed to send message. Please try again.");
+              console.error('EmailJS error:', err);
+            });
+        } catch (err) {
+          setError("An unexpected error occurred. Please try again.");
+          console.error('HandleSubmit error:', err);
+        }
       };
 
       return (
@@ -464,9 +506,15 @@
       );
     };
 
-    // Render the App
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
+    // Render the App with error handling
+    try {
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    } catch (error) {
+      console.error('Rendering error:', error);
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error').innerText = 'Failed to render the application. Please try again later.';
+    }
   </script>
 </body>
 </html>
