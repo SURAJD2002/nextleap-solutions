@@ -1,380 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NextLeap Solutions - Digital Solutions & Business Guidance</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <style>
-    @keyframes slideIn {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .animate-slide-in {
-      animation: slideIn 0.3s ease-out forwards;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-100%); }
-      to { transform: translateY(0); }
-    }
-    .mobile-menu {
-      transition: transform 0.3s ease-in-out;
-    }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, Component } = React;
-
-    // Error Boundary Component
-    class ErrorBoundary extends Component {
-      state = { hasError: false };
-      static getDerivedStateFromError(error) {
-        return { hasError: true };
-      }
-      render() {
-        if (this.state.hasError) {
-          return <h1 className="text-center text-red-600 p-4">Something went wrong.</h1>;
-        }
-        return this.props.children;
-      }
-    }
-
-    // Navbar Component with Mobile Responsiveness
-    const Navbar = () => {
-      const [isOpen, setIsOpen] = useState(false);
-      return (
-        <nav className="bg-blue-900 text-white p-4 sticky top-0 z-10">
-          <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-xl sm:text-2xl font-bold">NextLeap Solutions</h1>
-            <button 
-              className="md:hidden text-3xl bg-white text-blue-900 p-2 rounded-md transition-all duration-300" 
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? '✕' : '☰'}
-            </button>
-            <ul className={`md:flex md:space-x-6 ${isOpen ? 'block mobile-menu' : 'hidden'} md:block absolute md:static bg-blue-900 w-full md:w-auto left-0 top-16 p-4 md:p-0 transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} md:transform-none`}>
-              <li className="md:inline-block"><a href="#home" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Home</a></li>
-              <li className="md:inline-block"><a href="#services" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Services</a></li>
-              <li className="md:inline-block"><a href="#portfolio" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Portfolio</a></li>
-              <li className="md:inline-block"><a href="#about" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">About</a></li>
-              <li className="md:inline-block"><a href="#contact" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Contact</a></li>
-            </ul>
-          </div>
-        </nav>
-      );
-    };
-
-    // Hero Component
-    const Hero = () => (
-      <section id="home" className="relative bg-blue-800 text-white py-12 sm:py-20 text-center">
-        <img
-          src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="Digital Solutions Background"
-          className="absolute inset-0 w-full h-full object-cover opacity-50"
-          loading="lazy"
-        />
-        <div className="container mx-auto relative z-10 px-2 sm:px-4">
-          <h2 className="text-3xl sm:text-5xl font-bold mb-4">Apna Business Start Karo!</h2>
-          <p className="text-lg sm:text-2xl mb-4">Website, App aur Branding Sab Ek Jagah!</p>
-          <p className="text-sm sm:text-lg mb-6">Design, Develop, Grow – Apni Digital Pechaan Banao!</p>
-          <a href="#contact" className="bg-orange-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-orange-600 text-sm sm:text-base">Get a Free Quote</a>
-        </div>
-      </section>
-    );
-
-    // Services Component
-    const Services = () => {
-      const services = [
-        {
-          title: "Website Development",
-          desc: "Custom, responsive websites with modern frameworks like React and WordPress.",
-          icon: "🌐",
-          img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "App Development",
-          desc: "iOS and Android apps built with Flutter or React Native for seamless performance.",
-          icon: "📱",
-          img: "https://images.unsplash.com/photo-1610563166150-b34df4f3bcd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "Chatbots",
-          desc: "AI-powered chatbots for customer support and lead generation.",
-          icon: "🤖",
-          img: "https://images.unsplash.com/photo-1551478065-87b7fd1f3240?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "AI Models",
-          desc: "Custom AI solutions for automation, analytics, and predictive modeling.",
-          icon: "🧠",
-          img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "Business Guidance",
-          desc: "Mentorship and strategies to grow your startup or business.",
-          icon: "📈",
-          img: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-      ];
-      return (
-        <section id="services" className="py-12 sm:py-16 bg-gray-100">
-          <div className="container mx-auto text-center px-2 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">One-Stop Tech & Biz Solution</h2>
-            <p className="text-base sm:text-lg text-gray-600 mb-8">Startup ka Sapna? Hum Banayenge Uska Platform!</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 px-2 sm:px-4">
-              {services.map((service, index) => (
-                <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-                  <img src={service.img} alt={service.title} className="w-full h-36 sm:h-48 object-cover rounded-lg mb-4 max-h-36 sm:max-h-48" loading="lazy" />
-                  <span className="text-3xl sm:text-4xl mb-4 block">{service.icon}</span>
-                  <h3 className="text-lg sm:text-xl font-semibold mb-2">{service.title}</h3>
-                  <p className="text-gray-600 text-sm sm:text-base">{service.desc}</p>
-                  <a href="#contact" className="text-blue-600 hover:underline mt-4 inline-block text-sm sm:text-base">Learn More</a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // Portfolio Component
-    const Portfolio = () => {
-      const projects = [
-        {
-          title: "E-Commerce Website",
-          desc: "A responsive online store built with React and Stripe.",
-          img: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "Fitness App",
-          desc: "A cross-platform app for workout tracking using Flutter.",
-          img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-        },
-        {
-          title: "Customer Support Chatbot",
-          desc: "AI chatbot for 24/7 customer service.",
-          img: "https://unsplash.com/photos/a-white-robot-with-blue-eyes-and-a-laptop--0xMiYQmk8g"
-        },
-      ];
-      return (
-        <section id="portfolio" className="py-12 sm:py-16">
-          <div className="container mx-auto text-center px-2 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Portfolio</h2>
-            <p className="text-base sm:text-lg text-gray-600 mb-8">Sell Your Product Online and Grow Your Business Worldwide!</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 px-2 sm:px-4">
-              {projects.map((project, index) => (
-                <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
-                  <img src={project.img} alt={project.title} className="w-full h-36 sm:h-48 object-cover rounded-lg mb-4 max-h-36 sm:max-h-48" loading="lazy" />
-                  <h3 className="text-lg sm:text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-gray-600 text-sm sm:text-base">{project.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // About Component
-    const About = () => (
-      <section id="about" className="py-12 sm:py-16 bg-gray-100">
-        <div className="container mx-auto text-center px-2 sm:px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Us</h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-4">Empowering Startups with Innovative Solutions</p>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-            NextLeap Solutions is dedicated to empowering businesses with cutting-edge digital solutions and strategic guidance. From Idea to Execution – All in One Place!
-          </p>
-          <img
-            src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-            alt="Team Collaboration"
-            className="w-full max-w-2xl mx-auto h-40 sm:h-64 object-cover rounded-lg max-h-40 sm:max-h-64"
-            loading="lazy"
-          />
-        </div>
-      </section>
-    );
-
-    // Contact Component
-    const Contact = () => {
-      const [formData, setFormData] = useState({ name: "", email: "", phone: "", service: "", message: "" });
-      const [showNotification, setShowNotification] = useState(false);
-      const [error, setError] = useState(null);
-
-      const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
-
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        emailjs.init("dPxOR1vXr6ozvagsG"); // Replace with your EmailJS User ID
-        emailjs.send("service_fm57xal", "template_ufaaac9", {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          service: formData.service,
-          message: formData.message,
-        })
-          .then(() => {
-            setShowNotification(true);
-            setFormData({ name: "", email: "", phone: "", service: "", message: "" });
-            setTimeout(() => setShowNotification(false), 3000);
-          })
-          .catch((err) => {
-            setError("Failed to send message. Please try again.");
-            console.error(err);
-          });
-      };
-
-      return (
-        <section id="contact" className="py-12 sm:py-16">
-          <div className="container mx-auto text-center px-2 sm:px-4">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Get in Touch</h2>
-            <p className="text-base sm:text-lg text-gray-600 mb-2">Apna Business Online Le Jao – Website aur Mobile App ke Saath!</p>
-            <p className="text-base sm:text-lg text-gray-600 mb-8">Take Your Business Online with Websites and Mobile Apps!</p>
-            <div className="max-w-lg mx-auto bg-white p-4 sm:p-8 rounded-lg shadow-lg">
-              <div className="mb-6 text-left">
-                <p className="text-gray-600 text-sm sm:text-base"><strong>Email:</strong> sk6938464@gmail.com</p>
-                <p className="text-gray-600 text-sm sm:text-base"><strong>Phone:</strong> +91-8825287284</p>
-                <p className="text-gray-600 text-sm sm:text-base">
-                  <strong>WhatsApp:</strong>{' '}
-                  <a
-                    href="https://wa.me/918825287284?text=Hello,%20I'm%20interested%20in%20NextLeap%20Solutions%20services!"
-                    className="text-blue-600 hover:underline flex items-center"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>
-                      <svg className="w-6 h-6 sm:w-8 sm:h-8 mr-2 fill-green-500 align-middle" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.134.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-.669-.916-.983-.246-.313-.492-.454-.669-.454h-.57c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462.966 2.875 1.103 3.073.138.198 1.922 3.078 4.658 4.312.645.297 1.148.446 1.542.496.594.074 1.836-.223 2.098-.347.397-.198 1.24-.645 1.414-.943.173-.297.173-.645.074-.943-.099-.297-.446-.645-.743-.794zm-5.385 6.39c-2.477 0-4.95-.669-7.128-1.975l-.51.297-3.765 1.016 1.016-3.715-.297-.52c-1.414-2.228-2.178-4.85-2.178-7.575 0-6.934 5.611-12.545 12.545-12.545s12.545 5.611 12.545 12.545c0 6.935-5.611 12.546-12.545 12.546zm0-22.297c-5.412 0-9.752 4.34-9.752 9.752 0 2.427.892 4.753 2.526 6.586l-.595 2.178 2.228-.595c1.784 1.586 4.06 2.427 6.593 2.427 5.412 0 9.752-4.34 9.752-9.752s-4.34-9.752-9.752-9.752z"/>
-                      </svg>
-                    </span>
-                    +91-8825287284
-                  </a>
-                </p>
-                <p className="text-gray-600 text-sm sm:text-base">
-                  <strong>Follow Us:</strong>{' '}
-                  <a href="#" className="text-blue-600 hover:underline">LinkedIn</a>,{' '}
-                  <a href="#" className="text-blue-600 hover:underline">Twitter</a>
-                </p>
-              </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input 
-                  type="text" 
-                  name="name" 
-                  value={formData.name} 
-                  onChange={handleChange} 
-                  placeholder="Your Name" 
-                  className="w-full p-4 border rounded-lg text-sm sm:text-base" 
-                  required 
-                />
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={formData.email} 
-                  onChange={handleChange} 
-                  placeholder="Your Email" 
-                  className="w-full p-4 border rounded-lg text-sm sm:text-base" 
-                  required 
-                />
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleChange} 
-                  placeholder="Your Phone Number" 
-                  className="w-full p-4 border rounded-lg text-sm sm:text-base" 
-                  required 
-                />
-                <select 
-                  name="service" 
-                  value={formData.service} 
-                  onChange={handleChange} 
-                  className="w-full p-4 border rounded-lg text-sm sm:text-base" 
-                  required
-                >
-                  <option value="">Select a Service</option>
-                  <option value="website">Website Development</option>
-                  <option value="app">App Development</option>
-                  <option value="chatbot">Chatbot</option>
-                  <option value="ai">AI Model</option>
-                  <option value="business">Business Guidance</option>
-                </select>
-                <textarea 
-                  name="message" 
-                  value={formData.message} 
-                  onChange={handleChange} 
-                  placeholder="Your Message" 
-                  className="w-full p-4 border rounded-lg text-sm sm:text-base" 
-                  rows="5" 
-                  required
-                ></textarea>
-                <button 
-                  type="submit" 
-                  className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 text-sm sm:text-base"
-                >
-                  Send Message
-                </button>
-              </form>
-              {error && (
-                <div className="mt-4 text-red-600 text-sm sm:text-base">{error}</div>
-              )}
-            </div>
-            {showNotification && (
-              <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 animate-slide-in">
-                <span>Successfully sent!</span>
-                <button 
-                  onClick={() => setShowNotification(false)} 
-                  className="text-white hover:text-gray-200"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-      );
-    };
-
-    // Footer Component
-    const Footer = () => (
-      <footer className="bg-blue-900 text-white py-6">
-        <div className="container mx-auto text-center px-2 sm:px-4">
-          <p className="text-sm sm:text-base">© 2025 NextLeap Solutions. All rights reserved.</p>
-        </div>
-      </footer>
-    );
-
-    // Main App Component
-    const App = () => (
-      <ErrorBoundary>
-        <div>
-          <Navbar />
-          <Hero />
-          <Services />
-          <Portfolio />
-          <About />
-          <Contact />
-          <Footer />
-        </div>
-      </ErrorBoundary>
-    );
-
-    // Render the App
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
-  </script>
-</body>
-</html> -->
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -423,24 +46,90 @@
     }
 
     // Navbar Component with Mobile Responsiveness
-    const Navbar = () => {
+    const Navbar = ({ setShowContent }) => {
       const [isOpen, setIsOpen] = useState(false);
+
+      const handleMenuItemClick = (sectionId) => {
+        setIsOpen(false); // Close the menu
+        setShowContent(true); // Show content
+        // Smooth scroll to the section
+        document.querySelector(sectionId).scrollIntoView({ behavior: 'smooth' });
+      };
+
       return (
-        <nav className="bg-blue-900 text-white p-4 sticky top-0 z-10">
+        <nav className="bg-blue-900 text-white p-4 sticky top-0 z-20">
           <div className="container mx-auto flex justify-between items-center">
             <h1 className="text-xl sm:text-2xl font-bold">NextLeap Solutions</h1>
             <button 
-              className="md:hidden text-3xl bg-white text-blue-900 p-2 rounded-md transition-all duration-300" 
-              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden text-2xl bg-white text-blue-900 p-1 rounded-md transition-all duration-300 focus:outline-none" 
+              onClick={() => {
+                setIsOpen(!isOpen);
+                setShowContent(!isOpen); // Hide content when opening menu, show when closing
+              }}
             >
               {isOpen ? '✕' : '☰'}
             </button>
-            <ul className={`md:flex md:space-x-6 ${isOpen ? 'block mobile-menu' : 'hidden'} md:block absolute md:static bg-blue-900 w-full md:w-auto left-0 top-16 p-4 md:p-0 transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} md:transform-none`}>
-              <li className="md:inline-block"><a href="#home" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Home</a></li>
-              <li className="md:inline-block"><a href="#services" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Services</a></li>
-              <li className="md:inline-block"><a href="#portfolio" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Portfolio</a></li>
-              <li className="md:inline-block"><a href="#about" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">About</a></li>
-              <li className="md:inline-block"><a href="#contact" className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg">Contact</a></li>
+            <ul className={`md:flex md:space-x-6 ${isOpen ? 'block mobile-menu min-h-screen' : 'hidden'} md:block absolute md:static bg-blue-900 w-full md:w-auto left-0 top-[64px] p-4 md:p-0 transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} md:transform-none z-10`}>
+              <li className="md:inline-block">
+                <a 
+                  href="#home" 
+                  className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMenuItemClick('#home');
+                  }}
+                >
+                  Home
+                </a>
+              </li>
+              <li className="md:inline-block">
+                <a 
+                  href="#services" 
+                  className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMenuItemClick('#services');
+                  }}
+                >
+                  Services
+                </a>
+              </li>
+              <li className="md:inline-block">
+                <a 
+                  href="#portfolio" 
+                  className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMenuItemClick('#portfolio');
+                  }}
+                >
+                  Portfolio
+                </a>
+              </li>
+              <li className="md:inline-block">
+                <a 
+                  href="#about" 
+                  className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMenuItemClick('#about');
+                  }}
+                >
+                  About
+                </a>
+              </li>
+              <li className="md:inline-block">
+                <a 
+                  href="#contact" 
+                  className="block py-2 md:py-0 hover:text-blue-300 text-base sm:text-lg" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMenuItemClick('#contact');
+                  }}
+                >
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
         </nav>
@@ -497,6 +186,12 @@
           desc: "Mentorship and strategies to grow your startup or business.",
           icon: "📈",
           img: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          title: "Data Analytics",
+          desc: "Actionable insights through data visualization and advanced analytics.",
+          icon: "📊",
+          img: "/data analysis.jpg"
         },
       ];
       const handleImageError = (e) => {
@@ -699,6 +394,7 @@
                   <option value="chatbot">Chatbot</option>
                   <option value="ai">AI Model</option>
                   <option value="business">Business Guidance</option>
+                  <option value="analytics">Data Analytics</option>
                 </select>
                 <textarea 
                   name="message" 
@@ -746,19 +442,27 @@
     );
 
     // Main App Component
-    const App = () => (
-      <ErrorBoundary>
-        <div>
-          <Navbar />
-          <Hero />
-          <Services />
-          <Portfolio />
-          <About />
-          <Contact />
-          <Footer />
-        </div>
-      </ErrorBoundary>
-    );
+    const App = () => {
+      const [showContent, setShowContent] = useState(true);
+
+      return (
+        <ErrorBoundary>
+          <div>
+            <Navbar setShowContent={setShowContent} />
+            {showContent && (
+              <>
+                <Hero />
+                <Services />
+                <Portfolio />
+                <About />
+                <Contact />
+                <Footer />
+              </>
+            )}
+          </div>
+        </ErrorBoundary>
+      );
+    };
 
     // Render the App
     const root = ReactDOM.createRoot(document.getElementById("root"));
